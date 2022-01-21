@@ -17,10 +17,10 @@ const History = () => {
       if (response) {
          const history = response.data.data
 
-         // Name arrays with no duplicate
+         // Sort name arrays with no duplicate
          const playerNames = [
             ...new Set([...history.map((h) => h.playerA.name), ...history.map((h) => h.playerB.name)]),
-         ]
+         ].sort()
          setPlayerList(playerNames)
          setSpecificPlayer(sample(playerNames))
          setHistory(history)
