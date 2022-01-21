@@ -1,5 +1,7 @@
 # Getting Started with Create React App
 
+Link exercise: [Reaktor](https://www.reaktor.com/assignment-2022-developers/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
