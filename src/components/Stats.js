@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { countBy, entries, flow, head, last, maxBy, partialRight, sample } from 'lodash'
 
+import Select from 'react-select'
 import Table from 'react-bootstrap/Table'
 import axios from 'axios'
 
 const History = () => {
    const [history, setHistory] = useState([])
+   const [playerList, setPlayerList] = useState([])
    const [specificPlayer, setSpecificPlayer] = useState()
 
    const fetchStats = async () => {
@@ -13,15 +15,19 @@ const History = () => {
 
       if (response) {
          const history = response.data.data
+
          // Name arrays with no duplicate
          const playerNames = [
             ...new Set([...history.map((h) => h.playerA.name), ...history.map((h) => h.playerB.name)]),
          ]
-         // console.log('history: ', history[0].playerA.name)
+         setPlayerList(playerNames)
          setSpecificPlayer(sample(playerNames))
          setHistory(history)
       }
    }
+
+   // Get options data for Select
+   const optionNames = playerList.map((player) => Object.create({ value: player, label: player }))
 
    // Get players' name
    const playerNames = [...history.map((h) => h.playerA.name), ...history.map((h) => h.playerB.name)]
@@ -46,19 +52,24 @@ const History = () => {
       (h) => h.playerA.name === specificPlayer || h.playerB.name === specificPlayer
    )
 
-   const winRatio = (array) => {
+   const winRatio = (array, selectedPlayer) => {
       let win = 0
       array.forEach((arr) => {
          if (
-            (arr.playerA.played === 'ROCK' && arr.playerB.played === 'SCISSORS') ||
-            (arr.playerA.played === 'SCISSORS' && arr.playerB.played === 'PAPER') ||
-            (arr.playerA.played === 'PAPER' && arr.playerB.played === 'ROCK')
+            (selectedPlayer === arr.playerA.name &&
+               ((arr.playerA.played === 'ROCK' && arr.playerB.played === 'SCISSORS') ||
+                  (arr.playerA.played === 'SCISSORS' && arr.playerB.played === 'PAPER') ||
+                  (arr.playerA.played === 'PAPER' && arr.playerB.played === 'ROCK'))) ||
+            (selectedPlayer === arr.playerB.name &&
+               ((arr.playerB.played === 'ROCK' && arr.playerA.played === 'SCISSORS') ||
+                  (arr.playerB.played === 'SCISSORS' && arr.playerA.played === 'PAPER') ||
+                  (arr.playerB.played === 'PAPER' && arr.playerA.played === 'ROCK')))
          ) {
             win += 1
          }
       })
 
-      return (win / numberOfGames) * 100 + ' %'
+      return `${win} of ${numberOfGames} = ${(win / numberOfGames) * 100} %`
    }
 
    const winMatch = (playerA, playerB) => {
@@ -67,14 +78,14 @@ const History = () => {
          (playerA.played === 'SCISSORS' && playerB.played === 'PAPER') ||
          (playerA.played === 'PAPER' && playerB.played === 'ROCK')
       ) {
-         return `${playerA.name}`
+         return <div style={{ color: 'red' }}>{playerA.name}</div>
       } else if (
          (playerA.played === 'ROCK' && playerB.played === 'ROCK') ||
          (playerA.played === 'SCISSORS' && playerB.played === 'SCISSORS') ||
          (playerA.played === 'PAPER' && playerB.played === 'PAPER')
       ) {
-         return `DRAW!!!`
-      } else return `${playerB.name}`
+         return <div style={{ color: 'green' }}>DRAW!!!</div>
+      } else return <div style={{ color: 'blue' }}>{playerB.name}</div>
    }
 
    useEffect(() => {
@@ -95,9 +106,17 @@ const History = () => {
             </thead>
             <tbody>
                <tr>
-                  <td>{specificPlayer}</td>
+                  <td style={{ textAlign: 'left' }}>
+                     <Select
+                        options={optionNames}
+                        onChange={(e) => setSpecificPlayer(e.value)}
+                        placeholder={specificPlayer}
+                        defaultValue={specificPlayer}
+                        isSearchable
+                     />
+                  </td>
                   <td>{numberOfGames}</td>
-                  <td>{winRatio(matches)}</td>
+                  <td>{winRatio(matches, specificPlayer)}</td>
                   <td>{maxPlayed}</td>
                </tr>
             </tbody>

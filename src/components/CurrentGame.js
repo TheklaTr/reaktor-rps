@@ -5,8 +5,8 @@ import React, { useEffect, useRef, useState } from 'react'
 const CurrentGame = () => {
    const ws = useRef(null)
    const [current, setCurrent] = useState([])
-   const [player1, setPlayer1] = useState({})
-   const [player2, setPlayer2] = useState({})
+   const [playerA, setPlayerA] = useState({})
+   const [playerB, setPlayerB] = useState({})
 
    useEffect(() => {
       ws.current = new WebSocket('ws://bad-api-assignment.reaktor.com/rps/live')
@@ -29,11 +29,12 @@ const CurrentGame = () => {
       if (current.length === 0) {
          return <p>Loading...</p>
       }
-      setPlayer1({
+
+      setPlayerA({
          name: JSON.parse(current).playerA.name,
          played: JSON.parse(current).playerA.played,
       })
-      setPlayer2({
+      setPlayerB({
          name: JSON.parse(current).playerB.name,
          played: JSON.parse(current).playerB.played,
       })
@@ -57,19 +58,19 @@ const CurrentGame = () => {
          <Row>
             <Col>
                <Card style={{ height: '15rem' }}>
-                  <Card.Title> Player 1 </Card.Title>
-                  <h3>{player1.name}</h3>
-                  <span style={{ color: 'red', fontSize: '5rem' }}>{Icon(player1)}</span>
-                  <div className="played">{player1.played}</div>
+                  <Card.Title> Player A </Card.Title>
+                  <h3>{playerA.name}</h3>
+                  <span style={{ color: 'red', fontSize: '5rem' }}>{Icon(playerA)}</span>
+                  <div className="played">{playerA.played}</div>
                </Card>
             </Col>
             <Col> versus </Col>
             <Col>
                <Card style={{ height: '15rem' }}>
-                  <Card.Title> Player 2 </Card.Title>
-                  <h3>{player2.name}</h3>
-                  <span style={{ color: 'blue', fontSize: '5rem' }}>{Icon(player2)}</span>
-                  <div>{player2.played}</div>
+                  <Card.Title> Player B </Card.Title>
+                  <h3>{playerB.name}</h3>
+                  <span style={{ color: 'blue', fontSize: '5rem' }}>{Icon(playerB)}</span>
+                  <div>{playerB.played}</div>
                </Card>
             </Col>
          </Row>
