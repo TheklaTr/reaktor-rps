@@ -10,6 +10,7 @@ const History = () => {
    const [playerList, setPlayerList] = useState([])
    const [specificPlayer, setSpecificPlayer] = useState()
 
+   //! Avoids CORS issues: https://create-react-app.dev/docs/proxying-api-requests-in-development/
    const fetchStats = async () => {
       const response = await axios(`/rps/history`).catch((error) => console.log(error))
 
@@ -32,7 +33,7 @@ const History = () => {
    // Get players' name
    const playerNames = [...history.map((h) => h.playerA.name), ...history.map((h) => h.playerB.name)]
 
-   // Number of games played
+   // TODO: Number of games played
    const numberOfGames = playerNames.filter((name) => name === specificPlayer).length
 
    // Get players' details
@@ -44,14 +45,23 @@ const History = () => {
    // Get specific player played
    const specificPlayerPlayed = specificPlayerInfo.map((f) => f.played)
 
-   // Get most specific player played
-   const maxPlayed = flow(countBy, entries, partialRight(maxBy, last), head)(specificPlayerPlayed)
+   // TODO: Get most specific player played hand
+   /**
+    * & https://stackoverflow.com/questions/49731282/the-most-frequent-item-of-an-array-using-lodash
+    * * _countBy(): get an object of element:count
+    * * _.entries(): Convert to an array of tuples
+    * *_.maxBy(_.last): Find the max of last element of array (_.last), since the count value is the 2nd item in the tuple.
+    * *_.head(): Extract the element from the tuple
+    */
+   const maxPlayedHand = flow(countBy, entries, partialRight(maxBy, last), head)(specificPlayerPlayed)
+   console.log(maxPlayedHand)
 
    // Matches that specific player played
    const matches = history.filter(
       (h) => h.playerA.name === specificPlayer || h.playerB.name === specificPlayer
    )
 
+   // TODO: Win ratio of specific player
    const winRatio = (array, selectedPlayer) => {
       let win = 0
       array.forEach((arr) => {
@@ -69,7 +79,7 @@ const History = () => {
          }
       })
 
-      return `${win} of ${numberOfGames} = ${(win / numberOfGames) * 100} %`
+      return `${(win / numberOfGames) * 100}% (${win} of ${numberOfGames})`
    }
 
    const winMatch = (playerA, playerB) => {
@@ -78,14 +88,14 @@ const History = () => {
          (playerA.played === 'SCISSORS' && playerB.played === 'PAPER') ||
          (playerA.played === 'PAPER' && playerB.played === 'ROCK')
       ) {
-         return <div style={{ color: 'red' }}>{playerA.name}</div>
+         return <div style={{ color: '#BB5A5A' }}>{playerA.name}</div>
       } else if (
          (playerA.played === 'ROCK' && playerB.played === 'ROCK') ||
          (playerA.played === 'SCISSORS' && playerB.played === 'SCISSORS') ||
          (playerA.played === 'PAPER' && playerB.played === 'PAPER')
       ) {
          return <div style={{ color: 'green' }}>DRAW!!!</div>
-      } else return <div style={{ color: 'blue' }}>{playerB.name}</div>
+      } else return <div style={{ color: '#046582' }}>{playerB.name}</div>
    }
 
    useEffect(() => {
@@ -95,6 +105,7 @@ const History = () => {
    return (
       <>
          <h2>Player Statistics</h2>
+         <br />
          <Table striped bordered hover>
             <thead>
                <tr>
@@ -117,22 +128,23 @@ const History = () => {
                   </td>
                   <td>{numberOfGames}</td>
                   <td>{winRatio(matches, specificPlayer)}</td>
-                  <td>{maxPlayed}</td>
+                  <td>{maxPlayedHand}</td>
                </tr>
             </tbody>
          </Table>
          <br />
 
          <h2>Statistics</h2>
+         <br />
          <Table striped bordered hover>
             <thead>
                <tr>
                   <th>Game ID</th>
-                  <th>Player A Name</th>
-                  <th>Player A Played</th>
-                  <th>Player B Name</th>
-                  <th>Player B Played</th>
+                  <th style={{ backgroundColor: '#FF5C58' }}>Player A Name</th>
+                  <th style={{ backgroundColor: '#F38BA0' }}>Player A Played</th>
                   <th style={{ backgroundColor: '#E7FBBE' }}>RESULT</th>
+                  <th style={{ backgroundColor: '#949CDF' }}>Player B Played</th>
+                  <th style={{ backgroundColor: '#6998AB' }}>Player B Name</th>
                </tr>
             </thead>
             <tbody>
@@ -140,12 +152,12 @@ const History = () => {
                {matches &&
                   matches.map((h) => (
                      <tr key={h.t}>
-                        <td>{h.gameId}</td>
-                        <td>{h.playerA.name}</td>
-                        <td>{h.playerA.played}</td>
-                        <td>{h.playerB.name}</td>
-                        <td>{h.playerB.played}</td>
+                        <td style={{ textAlign: 'left' }}>{h.gameId}</td>
+                        <td style={{ backgroundColor: '#FE8F8F' }}>{h.playerA.name}</td>
+                        <td style={{ backgroundColor: '#FFBCBC' }}>{h.playerA.played}</td>
                         <td style={{ backgroundColor: '#FFFDDE' }}>{winMatch(h.playerA, h.playerB)}</td>
+                        <td style={{ backgroundColor: '#A7C5EB' }}>{h.playerB.played}</td>
+                        <td style={{ backgroundColor: '#B1D0E0' }}>{h.playerB.name}</td>
                      </tr>
                   ))}
             </tbody>
