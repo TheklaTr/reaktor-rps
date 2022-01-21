@@ -132,7 +132,7 @@ const History = () => {
                   <th>Player A Played</th>
                   <th>Player B Name</th>
                   <th>Player B Played</th>
-                  <th>RESULT</th>
+                  <th style={{ backgroundColor: '#E7FBBE' }}>RESULT</th>
                </tr>
             </thead>
             <tbody>
@@ -145,7 +145,7 @@ const History = () => {
                         <td>{h.playerA.played}</td>
                         <td>{h.playerB.name}</td>
                         <td>{h.playerB.played}</td>
-                        <td>{winMatch(h.playerA, h.playerB)}</td>
+                        <td style={{ backgroundColor: '#FFFDDE' }}>{winMatch(h.playerA, h.playerB)}</td>
                      </tr>
                   ))}
             </tbody>
