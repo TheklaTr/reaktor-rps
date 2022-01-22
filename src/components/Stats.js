@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Result, WinRatio } from './utils/calculations'
 import { countBy, entries, flow, head, last, maxBy, partialRight, sample } from 'lodash'
 
 import Select from 'react-select'
@@ -17,7 +18,7 @@ const History = () => {
       if (response) {
          const history = response.data.data
 
-         // Sort name arrays with no duplicate
+         // Sort names array with no duplicate
          const playerNames = [
             ...new Set([...history.map((h) => h.playerA.name), ...history.map((h) => h.playerB.name)]),
          ].sort()
@@ -61,43 +62,6 @@ const History = () => {
       (h) => h.playerA.name === specificPlayer || h.playerB.name === specificPlayer
    )
 
-   // TODO: Win ratio of specific player
-   const winRatio = (array, selectedPlayer) => {
-      let win = 0
-      array.forEach((arr) => {
-         if (
-            (selectedPlayer === arr.playerA.name &&
-               ((arr.playerA.played === 'ROCK' && arr.playerB.played === 'SCISSORS') ||
-                  (arr.playerA.played === 'SCISSORS' && arr.playerB.played === 'PAPER') ||
-                  (arr.playerA.played === 'PAPER' && arr.playerB.played === 'ROCK'))) ||
-            (selectedPlayer === arr.playerB.name &&
-               ((arr.playerB.played === 'ROCK' && arr.playerA.played === 'SCISSORS') ||
-                  (arr.playerB.played === 'SCISSORS' && arr.playerA.played === 'PAPER') ||
-                  (arr.playerB.played === 'PAPER' && arr.playerA.played === 'ROCK')))
-         ) {
-            win += 1
-         }
-      })
-
-      return `${(win / numberOfGames) * 100}% (${win} of ${numberOfGames})`
-   }
-
-   const winMatch = (playerA, playerB) => {
-      if (
-         (playerA.played === 'ROCK' && playerB.played === 'SCISSORS') ||
-         (playerA.played === 'SCISSORS' && playerB.played === 'PAPER') ||
-         (playerA.played === 'PAPER' && playerB.played === 'ROCK')
-      ) {
-         return <div style={{ color: '#BB5A5A' }}>{playerA.name}</div>
-      } else if (
-         (playerA.played === 'ROCK' && playerB.played === 'ROCK') ||
-         (playerA.played === 'SCISSORS' && playerB.played === 'SCISSORS') ||
-         (playerA.played === 'PAPER' && playerB.played === 'PAPER')
-      ) {
-         return <div style={{ color: 'green' }}>DRAW!!!</div>
-      } else return <div style={{ color: '#046582' }}>{playerB.name}</div>
-   }
-
    useEffect(() => {
       fetchStats()
    }, [])
@@ -127,7 +91,7 @@ const History = () => {
                      />
                   </td>
                   <td>{numberOfGames}</td>
-                  <td>{winRatio(matches, specificPlayer)}</td>
+                  <td>{WinRatio(matches, specificPlayer, numberOfGames)}</td>
                   <td>{maxPlayedHand}</td>
                </tr>
             </tbody>
@@ -155,7 +119,7 @@ const History = () => {
                         <td style={{ textAlign: 'left' }}>{h.gameId}</td>
                         <td style={{ backgroundColor: '#FE8F8F' }}>{h.playerA.name}</td>
                         <td style={{ backgroundColor: '#FFBCBC' }}>{h.playerA.played}</td>
-                        <td style={{ backgroundColor: '#FFFDDE' }}>{winMatch(h.playerA, h.playerB)}</td>
+                        <td style={{ backgroundColor: '#FFFDDE' }}>{Result(h.playerA, h.playerB)}</td>
                         <td style={{ backgroundColor: '#A7C5EB' }}>{h.playerB.played}</td>
                         <td style={{ backgroundColor: '#B1D0E0' }}>{h.playerB.name}</td>
                      </tr>

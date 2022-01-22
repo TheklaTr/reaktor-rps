@@ -15,7 +15,6 @@ const App = () => {
          <br />
          <br />
          <br />
-
          <Footer />
       </Container>
    )

@@ -2,6 +2,8 @@ import { Card, Col, Row } from 'react-bootstrap'
 import { FaHandPaper, FaHandRock, FaHandScissors } from 'react-icons/fa'
 import React, { useEffect, useRef, useState } from 'react'
 
+import { Result } from './utils/calculations'
+
 const CurrentGame = () => {
    const ws = useRef(null)
    const [playerA, setPlayerA] = useState({})
@@ -60,7 +62,13 @@ const CurrentGame = () => {
                </Card>
             </Col>
 
-            <Col></Col>
+            <Col>
+               <br />
+               <Card style={{ height: '10rem', border: 'none' }}>
+                  <Card.Title> RESULT </Card.Title>
+                  <h3>{Result(playerA, playerB)}</h3>
+               </Card>
+            </Col>
 
             <Col>
                <Card style={{ height: '15rem' }}>
