@@ -13,11 +13,11 @@ export const Result = (playerA, playerB) => {
 }
 
 // TODO: Win ratio of specific player
-export const WinRatio = (array, currSelectedPlayerName, games) => {
+export const WinRatio = (array, getSelectedPlayerName, games) => {
    let win = 0
    array.forEach((arr) => {
       let [selectedPlayer, otherPlayer] =
-         currSelectedPlayerName === arr.playerA.name ? [arr.playerA, arr.playerB] : [arr.playerB, arr.playerA]
+         getSelectedPlayerName === arr.playerA.name ? [arr.playerA, arr.playerB] : [arr.playerB, arr.playerA]
 
       win += winningPlays.includes(selectedPlayer.played + '-' + otherPlayer.played) ? 1 : 0
    })
