@@ -63,10 +63,14 @@ const CurrentGame = () => {
             </Col>
 
             <Col>
-               <br />
                <Card style={{ height: '10rem', border: 'none' }}>
-                  <Card.Title> RESULT </Card.Title>
-                  <h3>{Result(playerA, playerB)}</h3>
+                  <Card.Title>
+                     <h2>RESULT</h2>
+                  </Card.Title>
+                  <br />
+                  <h1>
+                     <b>{Result(playerA, playerB)}</b>
+                  </h1>
                </Card>
             </Col>
 
