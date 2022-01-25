@@ -13,7 +13,9 @@ const History = () => {
 
    //! Avoids CORS issues: https://create-react-app.dev/docs/proxying-api-requests-in-development/
    const fetchStats = async () => {
-      const response = await axios(`/rps/history`).catch((error) => console.log(error))
+      const response = await axios
+         .get(`https://bad-api-assignment.reaktor.com/rps/history`)
+         .catch((error) => console.log(error))
 
       if (response) {
          const history = response.data.data

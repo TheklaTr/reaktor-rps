@@ -6,6 +6,7 @@
       "@testing-library/user-event": "^12.1.10",
       "axios": "^0.24.0",
       "bootstrap": "^5.1.3",
+      "express": "^4.17.2",
       "lodash": "^4.17.21",
       "react": "^17.0.2",
       "react-bootstrap": "^2.0.3",
@@ -13,11 +14,12 @@
       "react-icons": "^4.3.1",
       "react-scripts": "^4.0.3",
       "react-select": "^5.2.2",
+      "request": "^2.88.2",
       "styled-components": "^5.3.3",
       "web-vitals": "^1.0.1"
    },
    "scripts": {
-      "start": "react-scripts start",
+      "start": "node app",
       "build": "react-scripts build",
       "test": "react-scripts test",
       "eject": "react-scripts eject"
@@ -42,7 +44,7 @@
    },
    "devDependencies": {
       "@testing-library/jest-dom": "^5.16.1",
-      "@testing-library/react": "^12.1.2"
-   },
-   "proxy": "https://bad-api-assignment.reaktor.com/"
+      "@testing-library/react": "^12.1.2",
+      "http-proxy-middleware": "^2.0.2"
+   }
 }
