@@ -3,11 +3,12 @@
    "version": "0.1.0",
    "private": true,
    "proxy": "https://bad-api-assignment.reaktor.com",
-   "homepage": "https://hopeful-lichterman-e1be74.netlify.app",
+   "homepage": "https://TrHien.github.io",
    "dependencies": {
       "@testing-library/user-event": "^12.1.10",
       "axios": "^0.24.0",
       "bootstrap": "^5.1.3",
+      "gh-pages": "^3.2.3",
       "lodash": "^4.17.21",
       "react": "^17.0.2",
       "react-bootstrap": "^2.0.3",
