@@ -13,21 +13,22 @@ const History = () => {
 
    //! Avoids CORS issues: https://create-react-app.dev/docs/proxying-api-requests-in-development/
    const fetchStats = async () => {
-      const response = await axios
-         .get(`https://bad-api-assignment.reaktor.com/rps/history`)
+      axios
+         .get(`/rps/history`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+         .then((response) => {
+            if (response) {
+               const history = response.data.data
+
+               // Sort names array with no duplicate
+               const playerNames = [
+                  ...new Set([...history.map((h) => h.playerA.name), ...history.map((h) => h.playerB.name)]),
+               ].sort()
+               setPlayerList(playerNames)
+               setSpecificPlayer(sample(playerNames))
+               setHistory(history)
+            }
+         })
          .catch((error) => console.log(error))
-
-      if (response) {
-         const history = response.data.data
-
-         // Sort names array with no duplicate
-         const playerNames = [
-            ...new Set([...history.map((h) => h.playerA.name), ...history.map((h) => h.playerB.name)]),
-         ].sort()
-         setPlayerList(playerNames)
-         setSpecificPlayer(sample(playerNames))
-         setHistory(history)
-      }
    }
 
    // Get options data for Select
